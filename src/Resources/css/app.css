@@ -682,3 +682,9 @@ footer .footer_discl {
     text-align: center;
     margin-top: 200px;
 }
+
+.tag_home_cards {
+    display: inline-block;
+    margin-bottom: 27px;
+    border: 1px solid #0e1731;
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Stripes from "../../../Resources/images/stripes.png";
 import { Tag } from "../../UI/Misc";
 import Reveal from "react-reveal/Reveal";
+import HomeCards from "./Cards";
 
 class MeetPlayers extends Component {
 
@@ -26,7 +27,9 @@ class MeetPlayers extends Component {
           <div className="container">
             <div className="home_meetplayers_wrapper">
               <div className="home_card_wrapper">
-                Card
+                <HomeCards 
+                  show={this.state.show}
+                />
               </div>
               <div className="home_text_wrapper">
                 <div style={{marginBottom: "20px"}}>

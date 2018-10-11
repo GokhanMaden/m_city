@@ -1,11 +1,34 @@
 import React from "react";
 
-const FomrField = (props) => {
+const FormField = ({formdata, id, change}) => {
+
+  const renderTemplate = () => {
+    let formTemplate = null;
+
+    switch(formdata.element) {
+      case("input"):
+        formTemplate = (
+          <div>
+            <input 
+              {...formdata.config}
+              value={formdata.value}
+              onChange={(event) => change({event, id})}
+            />
+          </div>
+        )
+      break;
+      default:
+        formTemplate= null;
+    }
+
+    return formTemplate;
+  }
+
   return(
     <div>
-      FormField
+      {renderTemplate()}
     </div>
   )
 }
 
-export default FomrField;
+export default FormField;

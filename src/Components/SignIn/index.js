@@ -63,6 +63,7 @@ class SignIn extends Component {
         dataToSubmit.email,
         dataToSubmit.password
       ).then(() => {
+        //TODO: burası çalışmıyor!..
         this.props.history.push("/dashboard");
       }).catch((error) => {
         this.setState({

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Fade from "react-reveal/Fade";
 import FormField from "../../UI/FormFields";
 import { validate } from "../../UI/Misc";
+import {firebasePromotion} from "../../../Firebase";
 
 class Enroll extends Component {
 
@@ -49,7 +50,7 @@ class Enroll extends Component {
     });
   }
 
-  resetFormSuccess = () => {
+  resetFormSuccess = (type) => {
     const newFormdata = {...this.state.formdata};
 
     for(let key in newFormdata) {
@@ -61,7 +62,7 @@ class Enroll extends Component {
     this.setState({
       formError: false,
       formdata: newFormdata,
-      formSuccess: "Congratulations!"
+      formSuccess: type ? "Congratulations!" : "Already on the database"
     })
 
     this.successMessage();
@@ -87,8 +88,17 @@ class Enroll extends Component {
     }
 
     if(formIsValid) {
-      console.log(dataToSubmit);
-      this.resetFormSuccess();
+      
+      firebasePromotion.orderByChild("email")
+        .equalTo(dataToSubmit.email)
+        .once("value")
+        .then((snapshot) => {
+          if(snapshot.val() === null) {
+            firebasePromotion.push(dataToSubmit);
+          } else {
+            this.resetFormSuccess(snapshot.val() === null);
+          }
+        });
     } else {
       this.setState({
         formError: !formIsValid
@@ -97,7 +107,6 @@ class Enroll extends Component {
   }
 
   render() {
-    console.log(this.state)
     const formError = this.state.formError ? <div className="error_label">Something is wrong, try again!</div>: null;
     return (
       <Fade>
@@ -115,6 +124,7 @@ class Enroll extends Component {
               {formError}
               <div className="success_label">{this.state.formSuccess}</div>
               <button onClick={(event) => this.submitForm(event)}>Enroll</button>
+              <div className="enroll_discl">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
             </div>
           </form>
         </div>
@@ -124,4 +134,4 @@ class Enroll extends Component {
 }
 
 export default Enroll;
-// section3 lecture 42 04:20
+

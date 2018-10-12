@@ -42,8 +42,8 @@ class AdminMatches extends Component {
     const tableRow  = this.state.matches ? this.state.matches.map((match, index) => {
 
       let final = (match.final === "Yes") ? 
-        (<span style={{color: "red"}}>Final</span>) : 
-        (<span style={{color: "green"}}>Not played yet</span>);
+        (<span className="matches_tag_red">Final</span>) : 
+        (<span className="matches_tag_green">Not played yet</span>);
         
       return (<TableRow key={index}>
               <TableCell>{match.date}</TableCell>

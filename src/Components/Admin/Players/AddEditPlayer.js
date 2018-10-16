@@ -3,7 +3,7 @@ import AdminLayout from "../../../Hoc/AdminLayout";
 import FormField from "../../UI/FormFields";
 import { validate } from "../../UI/Misc";
 import { firebasePlayers, firebaseDB, firebase } from "../../../Firebase"
-import FileUploader from "../../UI/FileUploader";
+import Fileuploader from "../../UI/FileUploader";
 
 class AddPlayer extends Component {
 
@@ -75,8 +75,8 @@ class AddPlayer extends Component {
             type: "select",
             options: [
               {
-                key: "Goalkeeper",
-                value: "Goalkeeper"
+                key: "Keeper",
+                value: "Keeper"
               },
               {
                 key: "Defence",
@@ -123,8 +123,6 @@ class AddPlayer extends Component {
       firebaseDB.ref(`players/${playerId}`).once("value")
         .then(snapshot => {
           const playerData = snapshot.val();
-
-          console.log("playerData = snapshot.val()", playerData);
 
           firebase.storage().ref("players")
             .child(playerData.image).getDownloadURL()
@@ -178,44 +176,41 @@ class AddPlayer extends Component {
     });
   }
 
-  submitForm(event) {
+  submitForm(event){
     event.preventDefault();
-
+    
     let dataToSubmit = {};
     let formIsValid = true;
 
-    for(let key in this.state.formdata) {
-      dataToSubmit[key] = this.state.formdata[key].value;
-      formIsValid = this.state.formdata[key].valid && formIsValid;
+    for(let key in this.state.formdata){
+        dataToSubmit[key] = this.state.formdata[key].value;
+        formIsValid = this.state.formdata[key].valid && formIsValid;
     }
 
-    if(formIsValid) {
-      if(this.state.formType === "Edit Player" ) {
-        firebaseDB.ref(`players/${this.state.playerId}`)
-          .update(dataToSubmit)
-          .then(() => {
-            this.successForm();
-            this.props.history.push("/admin_players")
-          }).catch( error => {
-            this.setState({
-              formError: true
+    if(formIsValid){
+        if(this.state.formType === 'Edit player'){
+            firebaseDB.ref(`players/${this.state.playerId}`)
+            .update(dataToSubmit).then(()=>{
+                this.successForm('Update correctly');
+            }).catch(e=>{
+                this.setState({formError: true})
             })
-          })
-      } else {
-        firebasePlayers.push(dataToSubmit).then(() => {
-          this.props.history.push("/admin_players")
-        }).catch( error => {
-          this.setState({
-            formError: true
-          })
-        })
-      }
+        } else {
+            firebasePlayers.push(dataToSubmit).then(()=>{
+                this.props.history.push('/admin_players')
+            }).catch(e=>{
+                this.setState({
+                    formError: true
+                })
+            })
+        }
+       
     } else {
-      this.setState({
-        formError: true
-      })
+        this.setState({
+            formError: true
+        })
     }
-  }
+}
 
   successForm = (message) => {
     this.setState({
@@ -246,6 +241,7 @@ class AddPlayer extends Component {
     //formdata'ya id'sini ve filename'ini geçebilmek için yapılan bir method.
     //bunun için updateform method'una 1 parametre daha ekledik. 
     //content'i olup olmamasına göre kontrol ediliyor. Sebebi ise bir event'i dinlemesi.
+
     this.updateForm({id: "image"}, filename);
   }
   
@@ -262,7 +258,7 @@ class AddPlayer extends Component {
           <div>
             <form onSubmit={(event) => this.submitForm(event)}>
 
-              <FileUploader 
+              <Fileuploader 
                 dir="players"
                 tag={"Player image"}
                 defaultImg={this.state.defaultImg}

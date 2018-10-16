@@ -8,7 +8,7 @@ class Fileuploader extends Component {
   state = {
     name:"",
     isUploading: false,
-    fileUrl: ""
+    fileURL: ""
   }
 
   handleUploadStart = () => {
@@ -31,12 +31,10 @@ class Fileuploader extends Component {
     });
     
     firebase.storage().ref(this.props.dir)
-      .child(filename).getDownloadURL()
-      .then(url => {
-        this.setState({
-          fileUrl: url
+        .child(filename).getDownloadURL()
+        .then( url => {
+            this.setState({fileURL: url })
         })
-      })
     
     this.props.filename(filename);    //receive filename to parent
   }
@@ -48,7 +46,7 @@ class Fileuploader extends Component {
     if(props.defaultImg) {
       return state = {
         name:props.defaultImgName,
-        fileUrl:props.defaultImg
+        fileURL:props.defaultImg
       }
     }
     return null;
@@ -59,7 +57,7 @@ class Fileuploader extends Component {
     this.setState({
       name:"",
       isUploading: false,
-      fileUrl: ""
+      fileURL: ""
     })
     //bize props olarak iletilen resetImage() methodunu 
     //tetikliyoruz ki parent'daki resetImage() çalışsın.
@@ -68,7 +66,7 @@ class Fileuploader extends Component {
 
   render() {
 
-    const storageRef = firebase.storage().ref(this.props.dir)
+    // const storageRef = firebase.storage().ref(this.props.dir)
 
     const progressBar = this.state.isUploading ? (
       <div className="progress" style={{textAlign: "center", margin: "30px"}}>
@@ -76,27 +74,32 @@ class Fileuploader extends Component {
       </div>
     ): null;
 
-    const isFileUrlExist = !this.state.fileUrl ? 
-           ( <div>
+    console.log(this.state)
+    const isFileUrlExist = !this.state.fileURL ? 
+            <div>
               <div className="label_inputs">{this.props.tag}</div>
-              <FileUploader 
-                accept="image/*"
-                name="image"
-                randomizeFilename
-                storageRef={ storageRef }
-                onUploadStart={this.handleUploadStart}
-                onUploadError={this.handleUploadError}
-                onUploadSuccess={this.handleUploadSuccess}
+              <FileUploader
+                  accept="image/*"
+                  name="image"
+                  randomizeFilename
+                  storageRef={firebase.storage().ref(this.props.dir)}
+                  onUploadStart={ this.handleUploadStart }
+                  onUploadError={ this.handleUploadError }
+                  onUploadSuccess={ this.handleUploadSuccess }
               />
-            </div> ) 
-            : (
-              <div className="image_upload_container">
-                <img style={{ width: "100%" }} src={this.state.fileUrl} alt={this.state.name} />
-                <div className="remove" onClick={() => this.uploadAgain()}>
-                  Remove
+            </div> 
+            : <div className="image_upload_container">
+                <img
+                    style={{
+                        width:'100%'
+                    }}
+                    src={this.state.fileURL}
+                    alt={this.state.name}
+                />
+                <div className="remove" onClick={()=>this.uploadAgain()}>
+                    Remove
                 </div>
               </div>
-            )
 
     return (
       <div>

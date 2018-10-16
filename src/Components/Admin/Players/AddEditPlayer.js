@@ -83,8 +83,8 @@ class AddPlayer extends Component {
                 value: "Defence"
               },
               {
-                key: "Midfielder",
-                value: "Midfielder"
+                key: "Midfield",
+                value: "Midfield"
               },
               {
                 key: "Striker",

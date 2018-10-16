@@ -11,6 +11,9 @@ const PlayerCard = (props) => {
         <div className="player_card_name">
           {props.name}
         </div>
+        <div className="player_card_name" style={{margin: "15px 0px"}}>
+          {props.lastname}
+        </div>
       </div>
     </div>
   )
